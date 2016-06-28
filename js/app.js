@@ -18,18 +18,23 @@ $(document).ready(function(){
 // submit a guess (WORKING)
 var $gameAnswer = '';
 var $totalGuess = 0;
-var $previousGuess = '';
+var $previousGuess = null;
 
 var setGuessCount = function (totalGuess){
 document.getElementById('count').innerHTML = totalGuess;
+$totalGuess = totalGuess;
 };
+
 var newGame = function(){
 	$gameAnswer = Math.floor(Math.random()*100)+1;
 	console.log($gameAnswer);
 	//clear all other contents
 	$('#guessList li').remove();
 	setGuessCount(0);
+  guessTemperature('Make your Guess!');
+  $previousGuess = null;
 };
+
 var guessTemperature = function(temp){
 	document.getElementById('feedback').innerHTML = temp;
 };
@@ -59,6 +64,18 @@ var guessMade = function($userGuess){
   }
 };
 
+var guessHottness = function($userGuess){
+  if ($previousGuess){
+    if (Math.abs($userGuess - $gameAnswer) < Math.abs($previousGuess - $gameAnswer)){
+      console.log('hotter');
+      guessTemperature('hotter');
+    } else {
+      console.log('colder');
+      guessTemperature('colder');
+    }
+  }
+};
+
 $('form').submit(function(event) {
     event.preventDefault();
     var $userGuess = $('#userGuess').val();
@@ -69,23 +86,16 @@ $('form').submit(function(event) {
     	console.log(' $userGuess is outside the parameters of the game');
     	alert('the number must be between 1-100');
     } else { 
-      console.log('made a guess');
-      $previousGuess = $userGuess;
+      console.log('made a guess');      
       guessMade($userGuess);
-      console.log($previousGuess);
     }
     console.log('clear submit field');
     $('#userGuess').val('');
-  
+    guessHottness($userGuess);
+    $previousGuess = $userGuess;    
+    console.log($previousGuess);
   });
 
 
 newGame();
 
-if ( Math.abs($userGuess - $gameAnswer) < Math.abs($previousGuess - $gameAnswer)){
-	console.log('hotter?!?!');
-	guessTemperature('hotter');
-	} else {
-		console.log('colder');
-		guessTemperature('colder');
-	};
