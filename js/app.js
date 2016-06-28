@@ -3,26 +3,25 @@ $(document).ready(function(){
 	'use strict';
 	
 	/*--- Display information modal box ---*/
-  	$(".what").click(function(){
-    	$(".overlay").fadeIn(1000);
+ $(".what").click(function(){
+   $(".overlay").fadeIn(1000);
 
-  	});
+ });
 
-  	/*--- Hide information modal box ---*/
-  	$("a.close").click(function(){
-  		$(".overlay").fadeOut(1000);
-  	});
+ /*--- Hide information modal box ---*/
+ $("a.close").click(function(){
+  $(".overlay").fadeOut(1000);
+});
 
 });
 
-// submit a guess (WORKING)
 var $gameAnswer = '';
 var $totalGuess = 0;
 var $previousGuess = null;
 
 var setGuessCount = function (totalGuess){
-document.getElementById('count').innerHTML = totalGuess;
-$totalGuess = totalGuess;
+  document.getElementById('count').innerHTML = totalGuess;
+  $totalGuess = totalGuess;
 };
 
 var newGame = function(){
@@ -39,10 +38,9 @@ var guessTemperature = function(temp){
 	document.getElementById('feedback').innerHTML = temp;
 };
 
-
 $("a.new").click(function(){
-  		newGame();
-  	});
+  newGame();
+});
 
 var guessMade = function($userGuess){
   if ($userGuess == $gameAnswer) {
@@ -65,7 +63,7 @@ var guessMade = function($userGuess){
 };
 
 var guessHottness = function($userGuess){
-  if ($previousGuess){
+  if ($previousGuess && $userGuess != $gameAnswer){
     if (Math.abs($userGuess - $gameAnswer) < Math.abs($previousGuess - $gameAnswer)){
       console.log('hotter');
       guessTemperature('hotter');
@@ -77,24 +75,24 @@ var guessHottness = function($userGuess){
 };
 
 $('form').submit(function(event) {
-    event.preventDefault();
-    var $userGuess = $('#userGuess').val();
-    if (isNaN($userGuess)) {
-      console.log('alert trigged because no input to $userGuess');
-      alert('This is not a number');
-    } else if($userGuess > 100 || $userGuess < 1){
-    	console.log(' $userGuess is outside the parameters of the game');
-    	alert('the number must be between 1-100');
-    } else { 
-      console.log('made a guess');      
-      guessMade($userGuess);
-    }
-    console.log('clear submit field');
-    $('#userGuess').val('');
-    guessHottness($userGuess);
-    $previousGuess = $userGuess;    
-    console.log($previousGuess);
-  });
+  event.preventDefault();
+  var $userGuess = $('#userGuess').val();
+  if (isNaN($userGuess)) {
+    console.log('alert trigged because no input to $userGuess');
+    alert('This is not a number');
+  } else if($userGuess > 100 || $userGuess < 1){
+   console.log(' $userGuess is outside the parameters of the game');
+   alert('the number must be between 1-100');
+ } else { 
+  console.log('made a guess');      
+  guessMade($userGuess);
+}
+console.log('clear submit field');
+$('#userGuess').val('');
+guessHottness($userGuess);
+$previousGuess = $userGuess;    
+console.log($previousGuess);
+});
 
 
 newGame();
